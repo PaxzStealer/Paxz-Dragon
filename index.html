@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dragon Minigame</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    text-align: center;
+    margin: 0;
+    padding: 0;
+    background-color: #f2f2f2;
+  }
+  .container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 80vh;
+  }
+  .game-box {
+    background-color: #fff;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    text-align: left;
+    transition: transform 0.3s ease-in-out;
+  }
+  .hidden {
+    display: none;
+  }
+  h2 {
+    margin-bottom: 10px;
+  }
+  p {
+    margin-bottom: 15px;
+  }
+  button {
+    font-size: 18px;
+    padding: 10px 20px;
+    margin: 0 10px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  button:hover {
+    background-color: #0056b3;
+  }
+  a {
+    color: #007bff;
+    text-decoration: none;
+    margin-top: 10px;
+    display: block;
+    transition: color 0.3s;
+  }
+  a:hover {
+    color: #0056b3;
+  }
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="game-box">
+    <h2>Welcome to the Dragon Minigame</h2>
+    <p>Prepare to face a mighty dragon in an epic battle for glory and rewards!</p>
+    <h3>Instructions:</h3>
+    <ol>
+      <li>Click the "Attack" button to strike the dragon.</li>
+      <li>Your attacks deal between 10 and 30 damage.</li>
+      <li>The dragon's attacks can deal between 20 and 40 damage.</li>
+      <li>Use your skills wisely and outlast the dragon to claim victory!</li>
+    </ol>
+    <button id="attack">Attack</button>
+    <div id="result" class="hidden"></div>
+    <a id="download-link" class="hidden" href="#">Claim Reward</a>
+  </div>
+</div>
+<script>
+  const attackButton = document.getElementById('attack');
+  const resultDiv = document.getElementById('result');
+  const downloadLink = document.getElementById('download-link');
+  const gameBox = document.querySelector('.game-box');
+
+  let playerHealth = 100;
+  let dragonHealth = 200;
+
+  attackButton.addEventListener('click', () => {
+    gameBox.style.transform = 'scale(1.05)';
+    setTimeout(() => {
+      gameBox.style.transform = 'scale(1)';
+      attackDragon();
+    }, 300);
+  });
+
+  function attackDragon() {
+    const playerDamage = Math.floor(Math.random() * 21) + 10;
+    const dragonDamage = Math.floor(Math.random() * 21) + 20;
+
+    playerHealth -= dragonDamage;
+    dragonHealth -= playerDamage;
+
+    displayResult(playerDamage, dragonDamage);
+  }
+
+  function displayResult(playerDamage, dragonDamage) {
+    resultDiv.innerHTML = `
+      <p>You dealt <strong>${playerDamage}</strong> damage to the dragon.</p>
+      <p>The dragon retaliated with <strong>${dragonDamage}</strong> damage.</p>
+      <p>Your health: <strong>${playerHealth}</strong></p>
+      <p>Dragon's health: <strong>${dragonHealth}</strong></p>
+    `;
+
+    if (playerHealth <= 0) {
+      resultDiv.innerHTML += `<p>You were defeated by the dragon. Better luck next time!</p>`;
+      attackButton.style.display = 'none';
+    } else if (dragonHealth <= 0) {
+      resultDiv.innerHTML += `<p>Congratulations! You have defeated the dragon and claimed your reward!</p>`;
+      downloadLink.style.display = 'block';
+      attackButton.style.display = 'none';
+    }
+
+    resultDiv.classList.remove('hidden');
+  }
+</script>
+</body>
+</html>
