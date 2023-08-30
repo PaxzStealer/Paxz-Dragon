@@ -18,16 +18,24 @@
     align-items: center;
     height: 80vh;
   }
-  .game-box {
-    background-color: #fff;
-    border-radius: 10px;
-    padding: 20px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  .instructions {
+    position: absolute;
+    left: 20px;
+    top: 20px;
     text-align: left;
-    transition: transform 0.3s ease-in-out;
+    background-color: #fff;
+    border-radius: 5px;
+    padding: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    animation: fadeIn 0.5s;
   }
   .hidden {
     display: none;
+  }
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
   }
   h2 {
     margin-bottom: 10px;
@@ -58,29 +66,49 @@
   a:hover {
     color: #0056b3;
   }
+  .game-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  .game-box {
+    background-color: #fff;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    text-align: left;
+    transition: transform 0.3s ease-in-out;
+  }
 </style>
 </head>
 <body>
 <div class="container">
-  <div class="game-box">
-    <h2>Welcome to the Dragon Minigame</h2>
-    <p>Prepare to face a mighty dragon in an epic battle for glory and rewards!</p>
-    <h3>Instructions:</h3>
+  <div class="instructions" id="instructions">
+    <p><strong>Instructions:</strong></p>
     <ol>
       <li>Click the "Attack" button to strike the dragon.</li>
       <li>Your attacks deal between 10 and 30 damage.</li>
       <li>The dragon's attacks can deal between 20 and 40 damage.</li>
       <li>Use your skills wisely and outlast the dragon to claim victory!</li>
     </ol>
-    <button id="attack">Attack</button>
-    <div id="result" class="hidden"></div>
-    <a id="download-link" class="hidden" href="#">Claim Reward</a>
+    <span id="close-instructions">X</span>
+  </div>
+  <div class="game-container">
+    <div class="game-box">
+      <h2>Welcome to the Dragon Minigame</h2>
+      <p>Prepare to face a mighty dragon in an epic battle for glory and rewards!</p>
+      <button id="attack">Attack</button>
+      <div id="result" class="hidden"></div>
+      <a id="download-link" class="hidden" href="#">Claim Reward</a>
+    </div>
   </div>
 </div>
 <script>
   const attackButton = document.getElementById('attack');
   const resultDiv = document.getElementById('result');
   const downloadLink = document.getElementById('download-link');
+  const instructionsDiv = document.getElementById('instructions');
+  const closeInstructions = document.getElementById('close-instructions');
   const gameBox = document.querySelector('.game-box');
 
   let playerHealth = 100;
@@ -92,6 +120,21 @@
       gameBox.style.transform = 'scale(1)';
       attackDragon();
     }, 300);
+  });
+
+  instructionsDiv.addEventListener('click', () => {
+    instructionsDiv.style.animation = 'fadeOut 0.5s';
+    setTimeout(() => {
+      instructionsDiv.style.display = 'none';
+    }, 500);
+  });
+
+  closeInstructions.addEventListener('click', (event) => {
+    event.stopPropagation();
+    instructionsDiv.style.animation = 'fadeOut 0.5s';
+    setTimeout(() => {
+      instructionsDiv.style.display = 'none';
+    }, 500);
   });
 
   function attackDragon() {
